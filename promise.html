@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      const executorFunction = (success, reject) => {
+        const isCoffeeMakerReady = true;
+
+        if (isCoffeeMakerReady) {
+          success("Kopi berhasil dibuat");
+        } else {
+          reject("Mesin Kopi tidak bisa digunakan!");
+        }
+      };
+      const success = (v) => console.log(v);
+      const error = (v) => console.log(v);
+      const makeACoffee = new Promise(executorFunction);
+      // makeACoffee.then(success).catch(error);
+
+      const state = {
+        isCoffeeMakerReady: true,
+        seedStocks: {
+          arabica: 250,
+          robusta: 60,
+          liberica: 80,
+        },
+      };
+      const getSeeds = (type, miligrams) => {
+        return new Promise((resolve, reject) => {
+          if (state.seedStocks[type] >= miligrams) {
+            state.seedStocks[type] -= miligrams;
+            resolve("Biji kopi didapatkan!");
+          } else {
+            reject("Maaf stock kopi habis!");
+          }
+        });
+      };
+      const makeCoffee = () => {
+        return new Promise((resolve, reject) => {
+          if (state.isCoffeeMakerReady) {
+            resolve("Kopi berhasil dibuat!");
+          } else {
+            reject("Maaf mesin tidak dapat digunakan!");
+          }
+        });
+      };
+      const servingToTable = () => {
+        return new Promise((resolve) => {
+          resolve("Pesanan kopi sudah selesai!");
+        });
+      };
+      function reserveACoffee(type, miligrams) {
+        getSeeds(type, miligrams)
+          .then(makeCoffee)
+          .then(servingToTable)
+          .then((resolvedValue) => {
+            console.log(resolvedValue);
+          })
+          .catch((rejectedReason) => {
+            console.log(rejectedReason);
+          });
+      }
+      // reserveACoffee("arabica", 80);
+
+      // promise all
+      const arabicaOrder = () => {
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            resolve("Kopi arabika selesai!");
+          }, 4000);
+        });
+      };
+      const robustaOrder = () => {
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            resolve("Kopi robusta selesai!");
+          }, 2000);
+        });
+      };
+      const libericaOrder = () => {
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            resolve("Kopi liberica selesai!");
+          }, 3000);
+        });
+      };
+      const promises = [arabicaOrder(), robustaOrder(), libericaOrder()];
+      // Promise.all() akan mengembalikan nilai jika seluruh proses promise di dalamnya selesai dijalankan.
+      // Promise.all(promises).then((resolvedValue) => {
+      // console.log(resolvedValue);
+      // });
+
+      const getCoffee = () => {
+        return new Promise((resolve, reject) => {
+          const seeds = 100;
+
+          setTimeout(() => {
+            if (seeds >= 10) {
+              resolve("Coffee didapatkan!");
+            } else {
+              reject("Biji kopi habis!");
+            }
+          }, 1000);
+        });
+      };
+      function makeCoffeePromise() {
+        getCoffee().then((coffee) => {
+          console.log(coffee);
+        });
+      }
+      function makeCoffeeCallback() {
+        getCoffee(function (coffee) {
+          console.log(coffee);
+        });
+      }
+      makeCoffeeCallback();
+    </script>
+  </body>
+</html>
