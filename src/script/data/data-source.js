@@ -1,4 +1,4 @@
-import clubs from "./clubs";
+import clubs from "./clubs.js";
 class DataSource {
   static searchClub = function (keyword) {
     return new Promise((success, fail) => {
