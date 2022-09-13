@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Handling Complex Data</title>
+    <style>
+      * {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        padding: 16px;
+      }
+
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      article-item {
+        display: block;
+        margin-bottom: 18px;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+        border-radius: 10px;
+        overflow: hidden;
+      }
+
+      article-item > .featured-image {
+        width: 100%;
+        max-height: 300px;
+        object-fit: cover;
+        object-position: center;
+      }
+
+      article-item > .article-info {
+        padding: 24px;
+      }
+
+      article-item > .article-info > p {
+        margin-top: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container"></div>
+    <script>
+      class ArticleItem extends HTMLElement {
+        set article(article) {
+          this._article = article;
+          this.render();
+        }
+        render() {
+          this.innerHTML = `
+          <img class="featured-image" src="${this._article.featuredImage}" alt="${this._article.title}">
+          <div class="article-info">
+            <h2><a href="${this._article.id}">${this._article.title}</a></h2>
+            <p>${this._article.description}</p>
+          </div>
+        `;
+        }
+      }
+      customElements.define("article-item", ArticleItem);
+
+      const article = {
+        id: 1,
+        title: "Lorem Ipsum Dolor",
+        featuredImage: "https://picsum.photos/id/204/536/354?grayscale",
+        description:
+          "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+      };
+
+      const containerElement = document.querySelector(".container");
+      const articleItemElement = document.createElement("article-item");
+      articleItemElement.article = article;
+      containerElement.appendChild(articleItemElement);
+    </script>
+  </body>
+</html>
