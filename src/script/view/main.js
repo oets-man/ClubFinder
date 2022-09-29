@@ -55,5 +55,15 @@ const main = () => {
 
   // buttonSearchElement.addEventListener("click", onButtonSearchClicked);
   searchElement.clickEvent = onButtonSearchClicked;
+
+  //auto jalan
+  window.addEventListener("load", async () => {
+    try {
+      const results = await DataSource.searchClub("a");
+      renderResult(results);
+    } catch (fail) {
+      fallbackResult(fail);
+    }
+  });
 };
 export default main;
